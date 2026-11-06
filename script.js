@@ -2,7 +2,7 @@ const hero = document.getElementById("hero");
 const navDesk = document.getElementById("navDesk")
 
 const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
         if(entry.isIntersecting){
            
             navDesk.classList.add("bg-[#000c3d]/40") 
