@@ -108,31 +108,33 @@ export default function App() {
             <a href="#investasi" className="group hidden sm:flex items-center gap-2 cta-primary px-8 py-2 rounded-md text-sm font-display font-semibold tracking-tight text-white">
               Konsultasi Eksekutif <span className="cta-arrow">→</span>
             </a>
-            <button 
-              id="mobile-toggle" 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden flex flex-col gap-1.5 p-1 cursor-pointer" 
-              aria-label="Toggle Navigation Menu"
-            >
-              <span className={`block w-5 h-px bg-white/70 transition-transform ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-              <span className={`block w-5 h-px bg-white/70 transition-opacity ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
-              <span className={`block w-3 h-px bg-white/70 transition-transform ${mobileMenuOpen ? '-rotate-45 -translate-y-1 w-5' : ''}`}></span>
-            </button>
-        </div>
-
-        {/* Mobile Drawer Menu */}
-        {mobileMenuOpen && (
-          <div id="mobile-menu" className="mobile-menu md:hidden absolute top-full left-0 right-0 bg-midnight/95 backdrop-blur-xl hairline-b">
-            <div className="px-6 py-6 flex flex-col gap-4">
-              <a href="#arsitektur" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Arsitektur</a>
-              <a href="#kapabilitas" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Kapabilitas</a>
-              <a href="#karya" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Karya Terpilih</a>
-              <a href="#investasi" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Investasi &amp; Spesifikasi</a>
-              <a href="#proses" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Protokol Eksekusi</a>
-              <a href="#investasi" className="cta-primary px-5 py-2.5 rounded-md text-sm font-display font-semibold tracking-tight text-center text-white mt-2" onClick={() => setMobileMenuOpen(false)}>Konsultasi Eksekutif</a>
-            </div>
-          </div>
-        )}
+    <button
+  id="mobile-toggle"
+  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+  className="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer"
+  aria-label="Toggle Navigation Menu"
+  aria-expanded={mobileMenuOpen}
+>
+  <span className={`block w-6 h-0.5 bg-white/80 transition-all duration-300 ${mobileMenuOpen ? 'translate-y-2 rotate-45' : ''}`}></span>
+  <span className={`block w-6 h-0.5 bg-white/80 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+  <span className={`block w-6 h-0.5 bg-white/80 transition-all duration-300 ${mobileMenuOpen ? '-translate-y-2 -rotate-45' : ''}`}></span>
+</button>
+{mobileMenuOpen && (
+  <div
+    id="mobile-menu"
+    className="md:hidden fixed top-16 left-0 right-0 z-40 max-h-[calc(100dvh-4rem)] overflow-y-auto bg-midnight/95 backdrop-blur-xl hairline-b"
+  >
+    <div className="px-6 py-6 flex flex-col gap-4">
+      <a href="#arsitektur" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Arsitektur</a>
+      <a href="#kapabilitas" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Kapabilitas</a>
+      <a href="#karya" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Karya Terpilih</a>
+      <a href="#investasi" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Investasi &amp; Spesifikasi</a>
+      <a href="#proses" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Protokol Eksekusi</a>
+      <a href="#investasi" className="cta-primary px-5 py-2.5 rounded-md text-sm font-display font-semibold tracking-tight text-center text-white mt-2" onClick={() => setMobileMenuOpen(false)}>Konsultasi Eksekutif</a>
+    </div>
+  </div>
+)}
+</div>
       </nav>
 
       {/* ═══════════════════════════════════════════════ */}
