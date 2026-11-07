@@ -3,7 +3,7 @@ import PatternWaves from './PatternWaves';
 import HoloCard from './holoCard';
 import portofolio1 from "./assets/kayuArdana.jpg"
 import techText from './techText'
-
+import logo from "./assets/LOGO.png"
 function useContainerWidth(max = 430) {
   const ref = useRef(null);
   const [width, setWidth] = useState(max);
@@ -90,8 +90,8 @@ export default function App() {
       
       <nav id="navbar" className="fixed flex justify-between px-6 h-16 items-center w-full z-50 backdrop-blur-md bg-midnight/80 hairline-b transition-all duration-300">
 
-            <a href="#">
-              <img src="src/assets/KodeinLogo-04 (1).png" alt="logo kodein" className="w-10 h-auto object-contain" />
+            <a href="#arsitektur">
+              <img src={logo} alt="logo kodein" className="w-10 h-auto object-contain" />
             </a>
 
           {/* Center: Minimalist Links */}
