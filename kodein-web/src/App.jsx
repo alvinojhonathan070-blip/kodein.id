@@ -4,6 +4,8 @@ import HoloCard from './holoCard';
 import portofolio1 from "./assets/kayuArdana.jpg"
 import techText from './techText'
 import logo from "./assets/LOGO.png"
+import logoBiru from "./assets/LOGO BIRU.png"
+
 function useContainerWidth(max = 430) {
   const ref = useRef(null);
   const [width, setWidth] = useState(max);
@@ -21,6 +23,18 @@ function useContainerWidth(max = 430) {
 }
 
 export default function App() {
+  const [theme, setTheme] = useState(() =>
+  localStorage.getItem('theme') ||
+  (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+);
+
+useEffect(() => {
+  document.documentElement.dataset.theme = theme;
+  localStorage.setItem('theme', theme);
+}, [theme]);
+
+const isLight = theme === 'light';
+
   const [cardRef, cardWidth] = useContainerWidth(430);
 
   // 1. State untuk Navigasi Mobile
@@ -91,7 +105,7 @@ export default function App() {
       <nav id="navbar" className="fixed flex justify-between px-6 h-16 items-center w-full z-50 backdrop-blur-md bg-midnight/80 hairline-b transition-all duration-300">
 
             <a href="#arsitektur">
-              <img src={logo} alt="logo kodein" className="w-10 h-auto object-contain" />
+              <img src={isLight ? logoBiru : logo} alt="logo kodein" className="w-10 h-auto object-contain" />
             </a>
 
           {/* Center: Minimalist Links */}
@@ -108,6 +122,15 @@ export default function App() {
             <a href="#investasi" className="group hidden sm:flex items-center gap-2 cta-primary px-8 py-2 rounded-md text-sm font-display font-semibold tracking-tight text-white">
               Konsultasi Eksekutif <span className="cta-arrow">→</span>
             </a>
+
+    <button
+  onClick={() => setTheme(isLight ? 'dark' : 'light')}
+  aria-label={isLight ? 'Aktifkan mode gelap' : 'Aktifkan mode terang'}
+  className="font-mono text-[11px] text-slate hover:text-white border border-white/10 px-3 py-1.5 rounded-sm transition-colors cursor-pointer"
+>
+  {isLight ? 'DARK' : 'LIGHT'}
+</button>
+
     <button
   id="mobile-toggle"
   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -145,9 +168,11 @@ export default function App() {
         {/* Layer 1: Background PatternWaves dari React Bits */}
         <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
           <PatternWaves
+            key={theme}
+            color={isLight ? '#0269a0' : '#027cb8'}
             preset="silk"
-            color="#027cb8"
-            backgroundColor="#000724"
+            backgroundColor={isLight ? '#f6f4ef' : '#000724'}
+            opacity={isLight ? 0.35 : 0.65}
             fade="edges"
             interactive={true}
             cursorSize={50}
@@ -163,7 +188,6 @@ export default function App() {
             speed={0.35}
             scale={1}
             direction={20}
-            opacity={0.65}
             fadeSize={0.5}
             characters=".:-=+*#%@"
             intro
@@ -212,18 +236,18 @@ export default function App() {
               {/* Micro Metrics SLA Bar */}
               <div className="flex items-center gap-6 sm:gap-8 mt-10 pt-6 hairline-t reveal" style={{ transitionDelay: '0.32s' }}>
                 <div>
-                  <span className="font-mono text-2xl font-medium telemetry-value text-white">47<span className="text-accent">+</span></span>
+                  <span className="font-mono text-2xl font-medium telemetry-value text-white">150+<span className="text-accent">+</span></span>
                   <p className="font-mono text-[10px] text-slate mt-0.5 tracking-wider uppercase">Projects Delivered</p>
                 </div>
                 <div className="w-px h-8 bg-white/10"></div>
                 <div>
-                  <span className="font-mono text-2xl font-medium telemetry-value text-white">99.98<span className="text-accent">%</span></span>
-                  <p className="font-mono text-[10px] text-slate mt-0.5 tracking-wider uppercase">Uptime SLA</p>
+                  <span className="font-mono text-2xl font-medium telemetry-value text-white">100<span className="text-accent"> Client</span></span>
+                  <p className="font-mono text-[10px] text-slate mt-0.5 tracking-wider uppercase">Re-Order</p>
                 </div>
                 <div className="w-px h-8 bg-white/10"></div>
                 <div>
                   <span className="font-mono text-2xl font-medium telemetry-value text-white">&lt;0.4<span className="text-accent">s</span></span>
-                  <p className="font-mono text-[10px] text-slate mt-0.5 tracking-wider uppercase">Avg. LCP Paint</p>
+                  <p className="font-mono text-[10px] text-slate mt-0.5 tracking-wider uppercase">Render Website</p>
                 </div>
               </div>
             </div>
@@ -249,7 +273,7 @@ export default function App() {
                 />
                 <a
                   href="#karya"
-                  className="font-mono cursor-pointer pt-6 hover:text-shadow-accent hover:text-shadow-sm transition-all duration-100 ease-in-out"
+                  className="font-mono cursor-pointer pt-6 hover:text-shadow-accent hover:text-shadow-2xs transition-all duration-200 ease-in-out"
                 >
                   See More
                 </a>
@@ -262,7 +286,7 @@ export default function App() {
       {/* ═══════════════════════════════════════════════ */}
       {/* CORPORATE TRUST & ECOSYSTEM SECTOR BAR */}
       {/* ═══════════════════════════════════════════════ */}
-      <section className="py-8 hairline-t hairline-b bg-surface/20">
+      <section className="px-4 py-8 hairline-t hairline-b bg-surface/20">
         <div className="max-w-350 mx-auto px-6">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <span className="font-mono text-[10px] text-slate/70 tracking-[0.2em] uppercase">BUILT BY SMK TRI RATNA STUDENT</span>
@@ -279,31 +303,48 @@ export default function App() {
       {/* ═══════════════════════════════════════════════ */}
       {/* SECTION 01: ASYMMETRIC BENTO GRID (KAPABILITAS) */}
       {/* ═══════════════════════════════════════════════ */}
-<section id="kapabilitas" className="py-24 relative">
-        <div className="max-w-350 mx-auto px-6">
-          
-          {/* Section Index Header */}
-          <div className="flex items-center gap-4 mb-10 reveal">
-            <span className="font-mono text-[11px] text-accent tracking-[0.2em] uppercase">[ 01 // LAYANAN &amp; KEUNGGULAN ]</span>
-            <div className="flex-1 h-px bg-white/10"></div>
-          </div>
+<section id="kapabilitas" className="px-4 py-8 relative">
+  <div className="max-w-350 mx-auto px-6">
+    <div className="mb-14 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-end reveal" style={{ transitionDelay: '0.06s' }}>
+    <div className="lg:col-span-7">
+    <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight leading-[1.1]">
+    Bukan Hanya Website.<br />
+    <span className="text-slate">Ini Identitas Bisnis</span>
+    <span className="text-accent"> Anda.</span>
+    </h2>
+    <p className="font-body text-sm text-slate leading-relaxed mt-4 max-w-2xl">
+    Calon klien biasanya mengecek website sebelum menghubungi Anda. Kami membangun website yang tampil profesional, cepat dibuka, dan mengarahkan pengunjung untuk meminta penawaran.
+    </p>
+  </div>
 
-          <div className="mb-14 reveal" style={{ transitionDelay: '0.06s' }}>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tight leading-[1.1]">
-              Bukan Hanya Website.<br />
-              <span className="text-slate">Ini Identitas Bisnis</span>
-              <span className="text-accent"> Anda.</span>
-            </h2>
-            <p className="font-body text-sm text-slate leading-relaxed mt-4 max-w-xl">
-              Calon klien biasanya mengecek website sebelum menghubungi Anda. Kami membangun website yang tampil profesional, cepat dibuka, dan mengarahkan pengunjung untuk meminta penawaran.
-            </p>
-          </div>
+  {/* Daftar isi layanan */}
+  <nav className="lg:col-span-5" aria-label="Ringkasan layanan">
+    {[
+      { no: '01', title: 'Desain khusus sesuai brand', href: '#layanan-desain' },
+      { no: '02', title: 'Server cepat di Jakarta + SSL', href: '#layanan-hosting' },
+      { no: '03', title: 'Alur halaman menuju penawaran', href: '#layanan-strategi' },
+      { no: '04', title: 'Template vs buatan Kodein.id', href: '#layanan-perbandingan' },
+    ].map((item) => (
+      <a
+        key={item.no}
+        href={item.href}
+        className="group flex items-center justify-between gap-4 py-3.5 hairline-b text-sm text-slate hover:text-white transition-colors"
+      >
+        <span className="flex items-center gap-4">
+          <span className="text-accent font-semibold text-xs tabular-nums">{item.no}</span>
+          <span className="font-body">{item.title}</span>
+        </span>
+        <span className="cta-arrow text-accent opacity-0 group-hover:opacity-100 transition-opacity">→</span>
+      </a>
+    ))}
+  </nav>
+</div>
 
           {/* Bento Grid */}
           <div className="bento-grid grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10">
 
             {/* Card 1 */}
-            <div className="bento-card bg-midnight p-8 lg:p-10 reveal" style={{ transitionDelay: '0.08s' }}>
+            <div id="layanan-desain" className="bento-card bg-midnight p-8 lg:p-10 reveal" style={{ transitionDelay: '0.08s'}}>
               <div className="radial-glow"></div>
               <span className="font-mono text-[10px] text-accent tracking-[0.15em] uppercase">Desain &amp; Pengembangan</span>
               <h3 className="font-display font-semibold text-xl mt-3 tracking-tight">Desain Khusus Sesuai Brand Perusahaan</h3>
@@ -334,7 +375,7 @@ export default function App() {
             </div>
 
             {/* Card 2 */}
-            <div className="bento-card bg-midnight p-8 lg:p-10 reveal" style={{ transitionDelay: '0.14s' }}>
+            <div id="layanan-hosting" className="bento-card bg-midnight p-8 lg:p-10 reveal" style={{ transitionDelay: '0.14s' }}>
               <div className="radial-glow"></div>
               <span className="font-mono text-[10px] text-accent tracking-[0.15em] uppercase">Hosting &amp; Keamanan</span>
               <h3 className="font-display font-semibold text-xl mt-3 tracking-tight">Server Cepat di Jakarta, Bukan Hosting Murah</h3>
@@ -349,10 +390,6 @@ export default function App() {
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-midnight via-transparent to-midnight/80 p-3 flex items-end justify-between">
-                  <span className="font-mono text-[10px] text-white bg-midnight/80 px-2 py-0.5 rounded border border-accent/40">SERVER DI JAKARTA</span>
-                  <span className="font-mono text-[10px] text-emerald-400 font-semibold bg-midnight/80 px-2 py-0.5 rounded border border-emerald-500/40">SSL AKTIF</span>
-                </div>
               </div>
 
               <div className="mt-5 space-y-2">
@@ -367,7 +404,7 @@ export default function App() {
             </div>
 
             {/* Card 3 */}
-            <div className="bento-card bg-midnight p-8 lg:p-10 reveal" style={{ transitionDelay: '0.20s' }}>
+            <div id="layanan-strategi" className="bento-card bg-midnight p-8 lg:p-10 reveal" style={{ transitionDelay: '0.20s' }}>
               <div className="radial-glow"></div>
               <span className="font-mono text-[10px] text-accent tracking-[0.15em] uppercase">Strategi &amp; Konten</span>
               <h3 className="font-display font-semibold text-xl mt-3 tracking-tight">Alur Website yang Mengarah ke Penawaran</h3>
@@ -404,7 +441,7 @@ export default function App() {
             </div>
 
             {/* Card 4: Interactive Comparison Module */}
-            <div className="bento-card bg-midnight p-8 lg:p-10 reveal" style={{ transitionDelay: '0.26s' }}>
+            <div id="layanan-perbandingan" className="bento-card bg-midnight p-8 lg:p-10 reveal" style={{ transitionDelay: '0.26s' }}>
               <div className="radial-glow"></div>
               <span className="font-mono text-[10px] text-accent tracking-[0.15em] uppercase">Perbandingan</span>
               <h3 className="font-display font-semibold text-xl mt-3 tracking-tight">Template Siap Pakai vs Buatan Kodein.id</h3>
@@ -489,12 +526,12 @@ export default function App() {
       {/* ═══════════════════════════════════════════════ */}
       {/* SECTION 02: SELECTED WORKS / ARSITEKTUR KARYA */}
       {/* ═══════════════════════════════════════════════ */}
-      <section id="karya" className="py-24 relative">
+      <section id="karya" className="py-8 relative">
         <div className="max-w-350 mx-auto px-6">
           
           {/* Section Index Header */}
           <div className="flex items-center gap-4 mb-10 reveal">
-            <span className="font-mono text-[11px] text-accent tracking-[0.2em] uppercase">[ 02 // KARYA TERPILIH ]</span>
+            <span className="font-mono text-[11px] text-accent tracking-[0.2em] uppercase">KARYA TERPILIH</span>
             <div className="flex-1 h-px bg-white/10"></div>
           </div>
 
@@ -515,7 +552,7 @@ export default function App() {
             <span className="font-mono text-[10px] text-slate border border-white/10 px-2 py-0.5 rounded-sm">Tailwind</span>
             <span className="font-mono text-[10px] text-slate border border-white/10 px-2 py-0.5 rounded-sm">Vanilla Jasvascript</span>
           </div>
-</div>
+          </div>
           {/* Expandable Editorial Project Rows */}
           <div className="space-y-0 hairline-b">
 
@@ -533,12 +570,12 @@ export default function App() {
       {/* ═══════════════════════════════════════════════ */}
       {/* SECTION 03: EXECUTIVE INVESTMENT MATRIX */}
       {/* ═══════════════════════════════════════════════ */}
-      <section id="investasi" className="py-24 relative">
+      <section id="investasi" className="py-8 relative">
         <div className="max-w-350 mx-auto px-6">
           
           {/* Section Index Header */}
           <div className="flex items-center gap-4 mb-10 reveal">
-            <span className="font-mono text-[11px] text-accent tracking-[0.2em] uppercase">[ 03 // INVESTASI &amp; SPESIFIKASI ]</span>
+            <span className="font-mono text-[11px] text-accent tracking-[0.2em] uppercase">INVESTASI &amp; SPESIFIKASI</span>
             <div className="flex-1 h-px bg-white/10"></div>
           </div>
 
@@ -583,7 +620,7 @@ export default function App() {
             {/* Tier 1: Executive Showcase */}
             <div className="tier-card bg-midnight p-8 sm:p-10 reveal" style={{ transitionDelay: '0.16s' }}>
               <div className="radial-glow"></div>
-              <span className="font-mono text-[10px] text-slate tracking-[0.15em] uppercase">Tier 01 // Emerging Brand</span>
+              <span className="font-mono text-[10px] text-slate tracking-[0.15em] uppercase">Emerging Brand</span>
               <h3 className="font-display font-bold text-2xl mt-2 tracking-tight text-white">Executive Showcase</h3>
               <p className="font-body text-[13px] text-slate mt-2 leading-relaxed">
                 Untuk emerging corporate brands &amp; profil perusahaan berdampak tinggi yang membutuhkan konversi presisi.
@@ -625,7 +662,7 @@ export default function App() {
                 </div>
               </div>
 
-              <a href="https://wa.me/6281234567890?text=Halo%20Kodein.id,%20saya%20tertarik%20konsultasi%20paket%20Executive%20Showcase" target="_blank" rel="noopener noreferrer" className="block mt-10 text-center cta-ghost px-6 py-3 rounded-md font-display font-medium text-sm tracking-tight text-slate hover:text-white">
+              <a href="https://wa.me/6288906324239?text=Halo%20Kodein.id,%20saya%20tertarik%20konsultasi%20paket%20Executive%20Showcase" target="_blank" rel="noopener noreferrer" className="block mt-10 text-center cta-ghost px-6 py-3 rounded-md font-display font-medium text-sm tracking-tight text-slate hover:text-white">
                 Pilih Paket Executive
               </a>
             </div>
@@ -636,7 +673,7 @@ export default function App() {
               <div className="absolute top-0 left-0 right-0 h-0.5 bg-accent"></div>
 
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[10px] text-accent tracking-[0.15em] uppercase font-semibold">Tier 02 // Most Popular</span>
+                <span className="font-mono text-[10px] text-accent tracking-[0.15em] uppercase font-semibold">Most Popular</span>
                 <span className="font-mono text-[9px] text-white tracking-widest bg-accent/20 border border-accent/40 px-2 py-0.5 rounded-sm font-semibold">MOST SELECTED BY CORPORATE</span>
               </div>
 
@@ -681,7 +718,7 @@ export default function App() {
                 </div>
               </div>
 
-              <a href="https://wa.me/6281234567890?text=Halo%20Kodein.id,%20saya%20tertarik%20konsultasi%20paket%20Corporate%20Presence" target="_blank" rel="noopener noreferrer" className="group mt-10 text-center cta-primary px-6 py-3 rounded-md font-display font-semibold text-sm tracking-tight text-white flex items-center justify-center gap-2">
+              <a href="https://wa.me/6288906324239?text=Halo%20Kodein.id,%20saya%20tertarik%20konsultasi%20paket%20Corporate%20Presence" target="_blank" rel="noopener noreferrer" className="group mt-10 text-center cta-primary px-6 py-3 rounded-md font-display font-semibold text-sm tracking-tight text-white flex items-center justify-center gap-2">
                 Pilih Corporate Presence <span className="cta-arrow">→</span>
               </a>
             </div>
@@ -689,7 +726,7 @@ export default function App() {
             {/* Tier 3: Signature Bespoke */}
             <div className="tier-card bg-midnight p-8 sm:p-10 reveal" style={{ transitionDelay: '0.28s' }}>
               <div className="radial-glow"></div>
-              <span className="font-mono text-[10px] text-slate tracking-[0.15em] uppercase">Tier 03 // Enterprise Custom</span>
+              <span className="font-mono text-[10px] text-slate tracking-[0.15em] uppercase">Enterprise Custom</span>
               <h3 className="font-display font-bold text-2xl mt-2 tracking-tight text-white">Signature Bespoke</h3>
               <p className="font-body text-[13px] text-slate mt-2 leading-relaxed">
                 Untuk market leader &amp; enterprise yang membutuhkan ekosistem digital kustom, integrasi API, dan keamanan tinggi.
@@ -731,7 +768,7 @@ export default function App() {
                 </div>
               </div>
 
-              <a href="https://wa.me/6281234567890?text=Halo%20Kodein.id,%20saya%20tertarik%20konsultasi%20paket%20Signature%20Bespoke" target="_blank" rel="noopener noreferrer" className="block mt-10 text-center cta-ghost px-6 py-3 rounded-md font-display font-medium text-sm tracking-tight text-slate hover:text-white">
+              <a href="https://wa.me/6288906324239?text=Halo%20Kodein.id,%20saya%20tertarik%20konsultasi%20paket%20Signature%20Bespoke" target="_blank" rel="noopener noreferrer" className="block mt-10 text-center cta-ghost px-6 py-3 rounded-md font-display font-medium text-sm tracking-tight text-slate hover:text-white">
                 Konsultasi Signature Enterprise
               </a>
             </div>
@@ -741,71 +778,94 @@ export default function App() {
           {/* Quick Comparison Matrix Table */}
           <div className="mt-12 hairline rounded-md bg-surface/20 p-6 sm:p-8 reveal" style={{ transitionDelay: '0.12s' }}>
             <div className="flex items-center justify-between mb-4">
-              <span className="font-mono text-[11px] text-accent tracking-wider uppercase font-semibold">Tabel Komparasi Spesifikasi Teknis</span>
+              <span className="font-mono text-[11px] text-accent tracking-wider uppercase font-semibold">Perbandingan Isi Paket</span>
             </div>
             <div className="overflow-x-auto scrollbar-thumb-blue-200">
               <table className="w-full text-left">
                 <thead>
                   <tr className="hairline-b text-slate">
-                    <th className="font-mono text-[10px] tracking-wider uppercase py-3 pr-4">Spesifikasi Kunci</th>
-                    <th className="font-mono text-[10px] tracking-wider uppercase py-3 px-4 text-center">Executive (Rp 6M)</th>
-                    <th className="font-mono text-[10px] text-accent tracking-wider uppercase py-3 px-4 text-center font-semibold">Corporate (Rp 11.5M)</th>
-                    <th className="font-mono text-[10px] tracking-wider uppercase py-3 pl-4 text-center">Bespoke (Rp 18M)</th>
+                    <th className="font-mono text-[10px] tracking-wider uppercase py-3 pr-4">Yang Anda Dapatkan</th>
+                    <th className="font-mono text-[10px] tracking-wider uppercase py-3 px-4 text-center">Executive (Rp 6 jt)</th>
+                    <th className="font-mono text-[10px] text-accent tracking-wider uppercase py-3 px-4 text-center font-semibold">Corporate (Rp 11,5 jt)</th>
+                    <th className="font-mono text-[10px] tracking-wider uppercase py-3 pl-4 text-center">Bespoke (Rp 18 jt)</th>
                   </tr>
                 </thead>
                 <tbody className="font-mono text-[12px]">
                   <tr className="hairline-b">
-                    <td className="py-3 pr-4 text-slate">Jumlah Halaman / Layout</td>
-                    <td className="py-3 px-4 text-center text-white/70">Hingga 5 Halaman</td>
-                    <td className="py-3 px-4 text-center text-white font-medium">10–12 Halaman</td>
-                    <td className="py-3 pl-4 text-center text-white/70">Unlimited / Custom</td>
+                    <td className="py-3 pr-4 text-slate">Jumlah Halaman</td>
+                    <td className="py-3 px-4 text-center text-white/70">1 halaman (hingga 5 seksi)</td>
+                    <td className="py-3 px-4 text-center text-white font-medium">Hingga 6 halaman</td>
+                    <td className="py-3 pl-4 text-center text-white/70">Hingga 10 halaman</td>
                   </tr>
                   <tr className="hairline-b">
-                    <td className="py-3 pr-4 text-slate">Bespoke UI/UX Figma</td>
+                    <td className="py-3 pr-4 text-slate">Mockup Desain di Figma</td>
                     <td className="py-3 px-4 text-center text-white/40">—</td>
-                    <td className="py-3 px-4 text-center text-accent font-semibold">✓ Eksklusif</td>
-                    <td className="py-3 pl-4 text-center text-accent font-semibold">✓ Full System</td>
+                    <td className="py-3 px-4 text-center text-accent font-semibold">✓ Termasuk</td>
+                    <td className="py-3 pl-4 text-center text-accent font-semibold">✓ Termasuk</td>
                   </tr>
                   <tr className="hairline-b">
-                    <td className="py-3 pr-4 text-slate">Dedicated NVMe Storage</td>
-                    <td className="py-3 px-4 text-center text-white/70 telemetry-value">2 GB SSD</td>
-                    <td className="py-3 px-4 text-center text-white telemetry-value font-medium">5 GB SSD</td>
-                    <td className="py-3 pl-4 text-center text-white/70 telemetry-value">10 GB Dedicated</td>
+                    <td className="py-3 pr-4 text-slate">Tampil Rapi di HP &amp; Laptop</td>
+                    <td className="py-3 px-4 text-center text-accent font-semibold">✓</td>
+                    <td className="py-3 px-4 text-center text-accent font-semibold">✓</td>
+                    <td className="py-3 pl-4 text-center text-accent font-semibold">✓</td>
                   </tr>
                   <tr className="hairline-b">
-                    <td className="py-3 pr-4 text-slate">Custom Micro-interactions</td>
-                    <td className="py-3 px-4 text-center text-white/40">Standar</td>
-                    <td className="py-3 px-4 text-center text-accent font-semibold">✓ GSAP Advanced</td>
-                    <td className="py-3 pl-4 text-center text-accent font-semibold">✓ 3D / Choreography</td>
+                    <td className="py-3 pr-4 text-slate">Animasi</td>
+                    <td className="py-3 px-4 text-center text-white/70">Dasar (hover &amp; muncul saat scroll)</td>
+                    <td className="py-3 px-4 text-center text-white font-medium">Animasi halus antar seksi</td>
+                    <td className="py-3 pl-4 text-center text-white/70">Animasi khusus tiap halaman</td>
                   </tr>
                   <tr className="hairline-b">
-                    <td className="py-3 pr-4 text-slate">Integrasi API &amp; CRM</td>
-                    <td className="py-3 px-4 text-center text-white/40">—</td>
-                    <td className="py-3 px-4 text-center text-white/40">—</td>
-                    <td className="py-3 pl-4 text-center text-accent font-semibold">✓ REST / GraphQL</td>
+                    <td className="py-3 pr-4 text-slate">Fitur Tambahan</td>
+                    <td className="py-3 px-4 text-center text-white/70">Tombol WhatsApp &amp; media sosial</td>
+                    <td className="py-3 px-4 text-center text-white font-medium">Formulir kontak + galeri</td>
+                    <td className="py-3 pl-4 text-center text-white/70">Katalog produk yang mudah diubah</td>
+                  </tr>
+                  <tr className="hairline-b">
+                    <td className="py-3 pr-4 text-slate">Domain &amp; Hosting + SSL</td>
+                    <td className="py-3 px-4 text-center text-white/70">Domain gratis 1 tahun</td>
+                    <td className="py-3 px-4 text-center text-white font-medium">Domain gratis 1 tahun</td>
+                    <td className="py-3 pl-4 text-center text-white/70">Domain gratis 1 tahun</td>
+                  </tr>
+                  <tr className="hairline-b">
+                    <td className="py-3 pr-4 text-slate">SEO Dasar</td>
+                    <td className="py-3 px-4 text-center text-white/70">Judul &amp; deskripsi halaman</td>
+                    <td className="py-3 px-4 text-center text-white font-medium">+ Google Search Console</td>
+                    <td className="py-3 pl-4 text-center text-white/70">+ Sitemap &amp; optimasi kecepatan</td>
+                  </tr>
+                  <tr className="hairline-b">
+                    <td className="py-3 pr-4 text-slate">Revisi Desain</td>
+                    <td className="py-3 px-4 text-center text-white/70">2 kali</td>
+                    <td className="py-3 px-4 text-center text-white font-medium">3 kali</td>
+                    <td className="py-3 pl-4 text-center text-white/70">5 kali</td>
+                  </tr>
+                  <tr className="hairline-b">
+                    <td className="py-3 pr-4 text-slate">Estimasi Pengerjaan</td>
+                    <td className="py-3 px-4 text-center text-white/70">± 14 hari kerja</td>
+                    <td className="py-3 px-4 text-center text-white font-medium">± 3–4 minggu</td>
+                    <td className="py-3 pl-4 text-center text-white/70">± 4–6 minggu</td>
                   </tr>
                   <tr>
-                    <td className="py-3 pr-4 text-slate">Level Support &amp; SLA</td>
-                    <td className="py-3 px-4 text-center text-white/50">Standar 30 Hari</td>
-                    <td className="py-3 px-4 text-center text-white font-medium">Priority 90 Hari</td>
-                    <td className="py-3 pl-4 text-center text-accent font-semibold">Dedicated 1 Tahun</td>
+                    <td className="py-3 pr-4 text-slate">Garansi Perbaikan Bug</td>
+                    <td className="py-3 px-4 text-center text-white/70">14 hari</td>
+                    <td className="py-3 px-4 text-center text-white font-medium">30 hari</td>
+                    <td className="py-3 pl-4 text-center text-white/70">60 hari</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════ */}
       {/* SECTION 04: PROTOKOL EKSEKUSI (PROCESS) */}
       {/* ═══════════════════════════════════════════════ */}
-      <section id="proses" className="py-24 relative">
+      <section id="proses" className="py-8 relative">
         <div className="max-w-350 mx-auto px-6">
           
           <div className="flex items-center gap-4 mb-10 reveal">
-            <span className="font-mono text-[11px] text-accent tracking-[0.2em] uppercase">[ 04 // PROTOKOL EKSEKUSI ]</span>
+            <span className="font-mono text-[11px] text-accent tracking-[0.2em] uppercase">PROTOKOL EKSEKUSI</span>
             <div className="flex-1 h-px bg-white/10"></div>
           </div>
 
@@ -877,12 +937,13 @@ export default function App() {
       {/* ═══════════════════════════════════════════════ */}
       {/* FOOTER & ARCHITECTURAL WATERMARK */}
       {/* ═══════════════════════════════════════════════ */}
-      <footer className="pt-24 pb-12 relative hairline-t bg-midnight">
+      <footer className="py-8 relative hairline-t bg-midnight">
         <div className="max-w-350 mx-auto px-6">
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-16">
-            
-            <div className="md:col-span-">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-10 md:gap-12 items-start mb-16">
+
+            {/* Kiri: brand */}
+            <div className="justify-self-start">
               <div className="flex items-center gap-2 mb-4">
                 <span className="font-display font-bold text-xl tracking-tight text-white">KODEIN<span className="text-accent">.</span>ID</span>
                 <span className="status-dot"></span>
@@ -891,7 +952,7 @@ export default function App() {
                 Premier B2B digital engineering &amp; web architecture agency di Indonesia. Mengubah logika bisnis korporasi menjadi pengalaman digital berkecepatan sub-detik yang menghasilkan konversi.
               </p>
               <div className="flex items-center gap-4 mt-6">
-                <a href="https://WA.ME/62895380003033" target="_blank" rel="noopener noreferrer" className="font-mono text-[11px] text-slate hover:text-accent transition-colors">WhatsApp</a>
+                <a href="https://wa.me/6288906324239" target="_blank" rel="noopener noreferrer" className="font-mono text-[11px] text-slate hover:text-accent transition-colors">WhatsApp</a>
                 <span className="text-white/10">|</span>
                 <a href="https://www.instagram.com/jhnthn14/" target="_blank" rel="noopener noreferrer" className="font-mono text-[11px] text-slate hover:text-accent transition-colors">Instagram</a>
                 <span className="text-white/10">|</span>
@@ -899,8 +960,9 @@ export default function App() {
               </div>
             </div>
 
-            <div>
-              <span className="font-mono text-[10px] text-slate/70 tracking-[0.2em] uppercase mb-4 block">Arsitektur Situs</span>
+            {/* Tengah: Arsitektur Situs */}
+            <div className="md:justify-self-center">
+              <p className="font-mono text-[10px] text-slate/70 tracking-[0.2em] uppercase mb-4">Arsitektur Situs</p>
               <div className="space-y-2.5">
                 <a href="#arsitektur" className="block font-body text-sm text-slate hover:text-white transition-colors">Arsitektur Utama</a>
                 <a href="#kapabilitas" className="block font-body text-sm text-slate hover:text-white transition-colors">Kapabilitas &amp; Teknologi</a>
@@ -910,8 +972,9 @@ export default function App() {
               </div>
             </div>
 
-            <div>
-              <span className="font-mono text-[10px] text-slate/70 tracking-[0.2em] uppercase mb-4 block">Markas Operasional</span>
+            {/* Kanan: Kantor Operasional */}
+            <div className="md:justify-self-end max-w-xs">
+              <span className="font-mono text-[10px] text-slate/70 tracking-[0.2em] uppercase mb-4 block">Kantor Operasional</span>
               <div className="space-y-1.5">
                 <p className="font-body text-sm text-white/90">Tangerang, Indonesia</p>
                 <p className="font-mono text-[11px] text-slate/70">Rukan Crown, Jl. Green Lake City Boulevard No.21, RT.004/RW.008, Petir, Cipondoh, Tangerang City, Banten 15147</p>
@@ -924,8 +987,8 @@ export default function App() {
 
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between pt-8 hairline-t gap-4">
-            <p className="font-mono text-[10px] text-slate/40 tracking-wider">© 2026 KODEIN.ID — ALL RIGHTS RESERVED // DIGITAL ENGINEERING JKT</p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="font-mono text-[10px] text-slate/40 tracking-wider">© 2026 KODEIN.ID WEB DEVELOPMENT COMPANY PROFILE</p>
             <p className="font-mono text-[10px] text-slate/40 tracking-wider">TURNING LOGIC INTO DIGITAL MAGIC</p>
           </div>
 
