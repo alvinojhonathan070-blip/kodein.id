@@ -93,23 +93,45 @@ const isLight = theme === 'light';
 
     window.addEventListener('mousemove', handleMouseMove);
 
+    // Auto-close menu mobile/tablet saat resize ke desktop (>= 1024px) atau tombol Escape ditekan
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setMobileMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       observer.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
 
   return (
     <div className="antialiased selection:bg-accent/30 selection:text-white bg-midnight text-white min-h-screen">
       
-      <nav id="navbar" className="fixed flex justify-between px-6 h-16 items-center w-full z-50 backdrop-blur-md bg-midnight/80 hairline-b transition-all duration-300">
+      {/* ═══════════════════════════════════════════════ */}
+      {/* NAVIGATION BAR (RESPONSIVE: MOBILE, TABLET & DESKTOP) */}
+      {/* ═══════════════════════════════════════════════ */}
+      <nav id="navbar" className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-midnight/80 hairline-b transition-all duration-300">
+        <div className="max-w-350 mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
 
-            <a href="#arsitektur">
-              <img src={isLight ? logoBiru : logo} alt="logo kodein" className="w-10 h-auto object-contain" />
-            </a>
+          {/* Left: Brand Logo */}
+          <a href="#arsitektur" className="flex items-center shrink-0">
+            <img src={isLight ? logoBiru : logo} alt="logo kodein" className="w-10 h-auto object-contain" />
+          </a>
 
-          {/* Center: Minimalist Links */}
-          <div className="nav-center hidden md:flex items-center gap-8">
+          {/* Center: Minimalist Links (Hidden on mobile & tablet, active on desktop lg+) */}
+          <div className="nav-center hidden lg:flex items-center gap-6 xl:gap-8">
             <a href="#arsitektur" className="nav-link font-body text-sm text-slate hover:text-white transition-colors">Arsitektur</a>
             <a href="#kapabilitas" className="nav-link font-body text-sm text-slate hover:text-white transition-colors">Kapabilitas</a>
             <a href="#karya" className="nav-link font-body text-sm text-slate hover:text-white transition-colors">Karya Terpilih</a>
@@ -117,47 +139,50 @@ const isLight = theme === 'light';
             <a href="#proses" className="nav-link font-body text-sm text-slate hover:text-white transition-colors">Protokol</a>
           </div>
 
-          {/* Right: High-Contrast CTA + Mobile Toggle */}
-          <div className="flex items-center gap-4">
-            <a href="#investasi" className="group hidden sm:flex items-center gap-2 cta-primary px-8 py-2 rounded-md text-sm font-display font-semibold tracking-tight text-white">
+          {/* Right: High-Contrast CTA + Theme Toggle + Mobile/Tablet Hamburger Toggle */}
+          <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+            <a href="#investasi" className="group hidden sm:inline-flex items-center gap-2 cta-primary px-4 md:px-5 py-2 rounded-md text-xs md:text-sm font-display font-semibold tracking-tight text-white">
               Konsultasi Eksekutif <span className="cta-arrow">→</span>
             </a>
 
-    <button
-  onClick={() => setTheme(isLight ? 'dark' : 'light')}
-  aria-label={isLight ? 'Aktifkan mode gelap' : 'Aktifkan mode terang'}
-  className="font-mono text-[11px] text-slate hover:text-white border border-white/10 px-3 py-1.5 rounded-sm transition-colors cursor-pointer"
->
-  {isLight ? 'DARK' : 'LIGHT'}
-</button>
+            <button
+              onClick={() => setTheme(isLight ? 'dark' : 'light')}
+              aria-label={isLight ? 'Aktifkan mode gelap' : 'Aktifkan mode terang'}
+              className="font-mono text-[11px] text-slate hover:text-white border border-white/10 px-2.5 sm:px-3 py-1.5 rounded-sm transition-colors cursor-pointer"
+            >
+              {isLight ? 'DARK' : 'LIGHT'}
+            </button>
 
-    <button
-  id="mobile-toggle"
-  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-  className="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer"
-  aria-label="Toggle Navigation Menu"
-  aria-expanded={mobileMenuOpen}
->
-  <span className={`block w-6 h-0.5 bg-white/80 transition-all duration-300 ${mobileMenuOpen ? 'translate-y-2 rotate-45' : ''}`}></span>
-  <span className={`block w-6 h-0.5 bg-white/80 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
-  <span className={`block w-6 h-0.5 bg-white/80 transition-all duration-300 ${mobileMenuOpen ? '-translate-y-2 -rotate-45' : ''}`}></span>
-</button>
-{mobileMenuOpen && (
-  <div
-    id="mobile-menu"
-    className="md:hidden fixed top-16 left-0 right-0 z-40 max-h-[calc(100dvh-4rem)] overflow-y-auto bg-midnight/95 backdrop-blur-xl hairline-b"
-  >
-    <div className="px-6 py-6 flex flex-col gap-4">
-      <a href="#arsitektur" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Arsitektur</a>
-      <a href="#kapabilitas" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Kapabilitas</a>
-      <a href="#karya" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Karya Terpilih</a>
-      <a href="#investasi" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Investasi &amp; Spesifikasi</a>
-      <a href="#proses" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Protokol Eksekusi</a>
-      <a href="#investasi" className="cta-primary px-5 py-2.5 rounded-md text-sm font-display font-semibold tracking-tight text-center text-white mt-2" onClick={() => setMobileMenuOpen(false)}>Konsultasi Eksekutif</a>
-    </div>
-  </div>
-)}
-</div>
+            <button
+              id="mobile-toggle"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden flex flex-col justify-center items-center gap-1.5 p-2 rounded cursor-pointer hover:bg-white/5 transition-colors"
+              aria-label="Toggle Navigation Menu"
+              aria-expanded={mobileMenuOpen}
+            >
+              <span className={`block w-6 h-0.5 bg-white/80 transition-all duration-300 ${mobileMenuOpen ? 'translate-y-2 rotate-45' : ''}`}></span>
+              <span className={`block w-6 h-0.5 bg-white/80 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+              <span className={`block w-6 h-0.5 bg-white/80 transition-all duration-300 ${mobileMenuOpen ? '-translate-y-2 -rotate-45' : ''}`}></span>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile & Tablet Drawer Menu (lg:hidden) */}
+        {mobileMenuOpen && (
+          <div
+            id="mobile-menu"
+            className="lg:hidden fixed top-16 left-0 right-0 z-40 max-h-[calc(100dvh-4rem)] overflow-y-auto bg-midnight/95 backdrop-blur-xl hairline-b shadow-2xl"
+          >
+            <div className="max-w-350 mx-auto px-6 py-6 flex flex-col gap-4">
+              <a href="#arsitektur" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Arsitektur</a>
+              <a href="#kapabilitas" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Kapabilitas</a>
+              <a href="#karya" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Karya Terpilih</a>
+              <a href="#investasi" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Investasi &amp; Spesifikasi</a>
+              <a href="#proses" className="font-body text-sm text-slate hover:text-white transition-colors" onClick={() => setMobileMenuOpen(false)}>Protokol Eksekusi</a>
+              <a href="#investasi" className="cta-primary px-5 py-2.5 rounded-md text-sm font-display font-semibold tracking-tight text-center text-white mt-2 sm:hidden" onClick={() => setMobileMenuOpen(false)}>Konsultasi Eksekutif</a>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* ═══════════════════════════════════════════════ */}
