@@ -91,7 +91,6 @@ const ATLAS_TILE = 128;
 const WAVE_UNIT = 520;
 const RIPPLE_CELL = 8;
 const RIPPLE_RATE = 60;
-const PIXEL_BUDGET = 4.5e6;
 const INTRO_SECONDS = 2;
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -206,12 +205,6 @@ float gradientNoise(vec3 p) {
     mix(mix(n001, n101, u.x), mix(n011, n111, u.x), u.y),
     u.z
   );
-}
-
-vec2 turn(vec2 v, float angle) {
-  float c = cos(angle);
-  float s = sin(angle);
-  return vec2(c * v.x - s * v.y, s * v.x + c * v.y);
 }
 
 float surface(vec2 p, float t) {
@@ -616,6 +609,7 @@ const PatternWaves = ({
 
     let width = 1;
     let height = 1;
+    let bounds = { left: 0, top: 0, width: 1, height: 1 };
     let raf = 0;
     let last = performance.now();
     let time = 0;
@@ -628,6 +622,10 @@ const PatternWaves = ({
     let rippleClock = 0;
     let atlasKey = '';
     const pointer = { x: 0, y: 0, inside: false, placed: false, lastX: 0, lastY: 0, burst: 0 };
+
+    const updateBounds = () => {
+      bounds = container.getBoundingClientRect();
+    };
 
     const buildRipple = () => {
       if (!floatTargets) return;
@@ -662,9 +660,10 @@ const PatternWaves = ({
     };
 
     const resize = () => {
+      updateBounds();
       width = Math.max(1, container.clientWidth);
       height = Math.max(1, container.clientHeight);
-      renderer.dpr = Math.min(window.devicePixelRatio || 1, 2, Math.sqrt(PIXEL_BUDGET / (width * height)));
+      renderer.dpr = 1;
       renderer.setSize(width, height);
       buildRipple();
       dirty = true;
@@ -794,10 +793,9 @@ const PatternWaves = ({
     };
 
     const locate = e => {
-      const rect = container.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      return { x, y, inside: x >= 0 && y >= 0 && x <= rect.width && y <= rect.height };
+      const x = e.clientX - bounds.left;
+      const y = e.clientY - bounds.top;
+      return { x, y, inside: x >= 0 && y >= 0 && x <= bounds.width && y <= bounds.height };
     };
 
     const onPointerMove = e => {
@@ -810,6 +808,7 @@ const PatternWaves = ({
     };
 
     const onPointerDown = e => {
+      updateBounds();
       const spot = locate(e);
       if (!spot.inside) return;
       pointer.x = spot.x;
@@ -840,6 +839,7 @@ const PatternWaves = ({
       if (!document.hidden) start();
     };
 
+    window.addEventListener('scroll', updateBounds, { passive: true });
     window.addEventListener('pointermove', onPointerMove, { passive: true });
     window.addEventListener('pointerdown', onPointerDown, { passive: true });
     window.addEventListener('pointerout', onPointerOut, { passive: true });
@@ -851,7 +851,10 @@ const PatternWaves = ({
     resizeObserver.observe(container);
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
-      start();
+      if (visible) {
+        updateBounds();
+        start();
+      }
     });
     intersectionObserver.observe(container);
 
@@ -867,6 +870,7 @@ const PatternWaves = ({
       cancelAnimationFrame(raf);
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
+      window.removeEventListener('scroll', updateBounds);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('pointerout', onPointerOut);

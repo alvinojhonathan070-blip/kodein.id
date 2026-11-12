@@ -27,7 +27,6 @@
 
 html {
   background-color: var(--color-midnight);
-  scroll-behavior: smooth;
 }
 
 body {
