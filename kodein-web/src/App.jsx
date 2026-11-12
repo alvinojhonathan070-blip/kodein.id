@@ -93,6 +93,7 @@ const isLight = theme === 'light';
 
     window.addEventListener('mousemove', handleMouseMove);
 
+
     // Auto-close menu mobile/tablet saat resize ke desktop (>= 1024px) atau tombol Escape ditekan
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -233,7 +234,7 @@ const isLight = theme === 'light';
             {/* Left Column (7 Cols on desktop): Typography & High-Impact Copy */}
             <div className="lg:col-span-7 pr-0 lg:pr-12 lg:hairline-r py-4">
               <div className="reveal">
-                <span className="font-mono text-[11px] text-accent tracking-[0.2em] uppercase">ENTERPRISE WEB ENGINEERING — EST. 2026</span>
+                <span className="font-mono text-[11px] text-accent tracking-[0.2em] uppercase">ENTERPRISE WEB ENGINEERING</span>
               </div>
 
               <h1 className="font-display font-bold text-4xl sm:text-5xl lg:text-[3.5rem] leading-[1.05] tracking-tight mt-6 reveal" style={{ transitionDelay: '0.08s' }}>
