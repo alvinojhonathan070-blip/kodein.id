@@ -6,7 +6,7 @@ import { ReactLenis } from 'lenis/react'
 import 'lenis/dist/lenis.css'
 
 createRoot(document.getElementById('root')).render(
-    <ReactLenis root options={{ lerp: 0.1, duration: 0.8, smoothWheel: true }}>
+    <ReactLenis root options={{ lerp: 0.1, duration: 2.0, smoothWheel: true }}>
       <App />
     </ReactLenis>
 )
